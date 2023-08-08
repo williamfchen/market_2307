@@ -18,7 +18,7 @@ RSpec.describe Vendor do
   end
 
   describe '#check_stock' do
-    it "checks the quantity of an item in the inventory" do
+    it 'checks the quantity of an item in the inventory' do
       expect(vendor.check_stock(item1)).to eq 0
       vendor.stock(item1, 30)
       expect(vendor.inventory).to match({
