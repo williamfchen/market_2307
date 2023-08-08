@@ -25,6 +25,7 @@ RSpec.describe Market do
 
   context "iteration 2" do
     before :each do
+      Date.stub(today: Date.new(2022, 10, 16))
       vendor1.stock(item1, 35)
       vendor1.stock(item2, 7)
       vendor2.stock(item4, 50)
@@ -82,6 +83,21 @@ RSpec.describe Market do
     describe '#overstocked_items' do
       it 'returns an array of items that are sold by more than one vendor and quantity is over 50' do
         expect(market.overstocked_items).to eq([item1])
+      end
+    end
+
+    describe 'date' do
+      it 'records the date upon initializing' do
+        expect(market.date).to eq("16/10/2022")
+      end
+    end
+
+    describe "#sell" do
+      it "sells the specified quantity from vendors" do
+        expect(market.sell(item1, 40)).to be true
+        expect(vendor1.check_stock(item1)).to eq 0
+        expect(vendor3.check_stock(item1)).to eq 60
+        expect(market.sell(item1, 70)).to be false
       end
     end
   end
