@@ -5,8 +5,8 @@ require './lib/market'
 RSpec.describe Market do
   let(:market) { Market.new("South Pearl Street Farmers Market") }
   let(:vendor1) { Vendor.new("Rocky Mountain Fresh") }
-  let(:item1) { Item.new ({name: 'Peach', price: "$0.75"}) }
-  let(:item2) { Item.new({name: 'Tomato', price: '$0.50'}) }
+  let(:item1) { Item.new ({name: "Peach", price: "$0.75"}) }
+  let(:item2) { Item.new({name: "Tomato", price: '$0.50'}) }
   let(:item3) { Item.new({name: "Peach-Raspberry Nice Cream", price: "$5.30"}) }
   let(:item4) { Item.new({name: "Banana Nice Cream", price: "$4.25"}) }
   let(:vendor2) { Vendor.new("Ba-Nom-a-Nom") }
@@ -58,6 +58,31 @@ RSpec.describe Market do
       expect(vendor1.potential_revenue).to eq 29.75
       expect(vendor2.potential_revenue).to eq 345.00
       expect(vendor3.potential_revenue).to eq 48.75
+    end
+
+    describe '#sorted_item_list' do
+      it 'returns an array of item names sorted alphabetically with no duplicates' do
+        expect(market.sorted_item_list).to eq(["Banana Nice Cream", "Peach", "Peach-Raspberry Nice Cream", 
+          "Tomato"])
+      end
+    end
+
+    describe '#total_inventory' do
+      it 'reports the quantities of all items sold' do
+        expected_inventory = {
+          item1 => { quantity: 100, vendors: [vendor1, vendor3] },
+          item2 => { quantity: 7, vendors: [vendor1] },
+          item3 => { quantity: 25, vendors: [vendor2] },
+          item4 => { quantity: 50, vendors: [vendor2] }
+        }
+        expect(market.total_inventory).to eq(expected_inventory)
+      end
+    end
+
+    describe '#overstocked_items' do
+      it 'returns an array of items that are sold by more than one vendor and quantity is over 50' do
+        expect(market.overstocked_items).to eq([item1])
+      end
     end
   end
 end
