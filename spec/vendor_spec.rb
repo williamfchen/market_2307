@@ -37,4 +37,13 @@ RSpec.describe Vendor do
       })
     end
   end
+
+  describe '#potential_revenue' do
+    it 'calculates potential revnue of all items * quantity' do
+      expect(vendor.check_stock(item1)).to eq 0
+      vendor.stock(item1, 35)
+      vendor.stock(item2, 7)
+      expect(vendor.potential_revenue).to eq 29.75
+    end
+  end
 end
